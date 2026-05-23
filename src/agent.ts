@@ -8,6 +8,17 @@ const messages: Anthropic.MessageParam[] = [];
 
 const toolDefinitions = allTools.map((t) => t.definition);
 
+// TODO(human): Write the system prompt text below.
+// What should the agent know about itself? What rules should it always follow?
+// What tone/style? What are its capabilities and limits?
+const SYSTEM_PROMPT: Anthropic.TextBlockParam[] = [
+  {
+    type: "text",
+    text: ``,
+    cache_control: { type: "ephemeral" },
+  },
+];
+
 /**
  * Given the assistant's response content (which may contain tool_use blocks),
  * run each requested tool and return an array of tool_result blocks suitable
@@ -66,6 +77,7 @@ async function runTurn(userText: string) {
     const response = await client.messages.create({
       model: "claude-sonnet-4-5",
       max_tokens: 1024,
+      system: SYSTEM_PROMPT,
       tools: toolDefinitions,
       messages,
     });
